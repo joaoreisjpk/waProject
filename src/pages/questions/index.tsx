@@ -31,7 +31,7 @@ export default function Questions() {
   const randomAnswers = shuffle(answers);
 
   function handleClick({ target }) {
-    setResume([...resume, { rightAnswerID, answerID: target.id, randomAnswers, difficulty}])
+    setResume([...resume, { rightAnswerID, question, answerID: target.id, randomAnswers, difficulty}])
 
     if (index === questions.length - 1) {
       push('/resume')

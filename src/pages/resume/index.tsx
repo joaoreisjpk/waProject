@@ -5,11 +5,12 @@ export default function Resume() {
   const { resume } = useQuestions();
   return (
     <div>
-      {resume.map(({ randomAnswers, rightAnswerID, answerID }) => {
+      {resume.map(({ randomAnswers, rightAnswerID, answerID, question }) => {
         {if (rightAnswerID === answerID) {
           return (
-            <section key={rightAnswerID}>
+            <section key={rightAnswerID} style={{ margin: '2rem 0' }}>
               <div>Você acertou a resposta!</div>
+              <div>{question}</div>
               {randomAnswers.map(({ answer, id }) => {
                 if (id === rightAnswerID) {
                   return <div style={{ color: 'green' }}>{answer}</div>;
@@ -23,8 +24,9 @@ export default function Resume() {
             </section>
           )
         } return (
-          <section key={rightAnswerID}>
+          <section key={rightAnswerID} style={{ margin: '2rem 0' }}>
             <div>Você errou a resposta!</div>
+            <div>{question}</div>
             {randomAnswers.map(({ answer, id }) => {
               if (id === rightAnswerID) {
                 return <div style={{ color: 'green' }}>{answer}</div>;

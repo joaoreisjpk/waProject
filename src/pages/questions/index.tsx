@@ -6,65 +6,56 @@ import { shuffle } from '../../helpers';
 export default function Questions() {
   const [index, setIndex] = useState(0);
   const { push } = useRouter();
-  const { questions, pontuationAtt } = useQuestions();
+  const { questions, resume, setResume } = useQuestions();
 
-  const randomID = () => Math.ceil(Math.random() * 10000000).toString();
+  const randomID = () => Math.ceil(Math.random() * (10 ** 13)).toString();
   const rightAnswerID = randomID();
 
   const {
     category,
     correct_answer: rightAnswer,
     difficulty,
-    incorrect_answers: wrongAnswer,
+    incorrect_answers,
     question,
-    type,
   } = questions[index];
 
+  const wrongAnswers = incorrect_answers.map(item => (
+    { id: randomID(), answer: item }
+  ))
+
+  const answers = [
+    ...wrongAnswers,
+    { id: rightAnswerID, answer: rightAnswer}
+  ];
+
+  const randomAnswers = shuffle(answers);
+
   function handleClick({ target }) {
+    setResume([...resume, { rightAnswerID, answerID: target.id, randomAnswers, difficulty}])
+
     if (index === questions.length - 1) {
       push('/resume')
       return;
     }
-    if (target.id === rightAnswerID) {
-      pontuationAtt(difficulty);
-    }
+
     setIndex(index + 1)
   }
-
-  const answers = () => (
-    [...wrongAnswer, rightAnswer].map((item, i) => {
-      if (i === wrongAnswer.length) {
-        return (
-          <button
-            key={item}
-            type="button"
-            onClick={handleClick}
-            id={rightAnswerID}
-          >
-            {item}
-          </button>
-        )
-      } else {
-        return (
-          <button
-            key={item}
-            type="button"
-            onClick={handleClick}
-            id={randomID()}
-          >
-            {item}
-          </button>
-        )
-      }
-    })
-  )
 
   return (
     <section>
       <div>Pergunta {index + 1} de {questions.length}</div>
       <div>{category}</div>
       <div>{question}</div>
-      { shuffle(answers()) }
+      { randomAnswers.map(({ id, answer }) => (
+        <button
+          key={answer}
+          type="button"
+          onClick={handleClick}
+          id={id}
+        >
+          {answer}
+        </button>
+      )) }
     </section>
   );
 

@@ -14,6 +14,7 @@ interface resumeProps {
   answerID: string;
   randomAnswers: { id: string, answer: string}[];
   difficulty: string;
+  question: string;
 }
 
 interface TransactionContextData {

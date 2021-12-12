@@ -1,46 +1,44 @@
+import { Typography } from '@mui/material';
 import React from 'react';
+import Header from '../../components/Header';
 import { useQuestions } from '../../context/useQuestions';
 
 export default function Resume() {
   const { resume } = useQuestions();
   return (
     <div>
+      <Header />
       {resume.map(({ randomAnswers, rightAnswerID, answerID, question }) => {
-        {if (rightAnswerID === answerID) {
+        {
+          if (rightAnswerID === answerID) {
+            return (
+              <section key={rightAnswerID} style={{ margin: '2rem 0' }}>
+                <Typography>Você acertou a resposta!</Typography>
+                <Typography>{question.replace(/&quot;/g, '"').replace(/&#039;/g, "'")}</Typography>
+                {randomAnswers.map(({ answer, id }) => {
+                  if (id === rightAnswerID) {
+                    return <Typography style={{ color: 'green' }}>{answer}</Typography>;
+                  }
+                  return <Typography key='olar'>{answer}</Typography>;
+                })}
+              </section>
+            );
+          }
           return (
             <section key={rightAnswerID} style={{ margin: '2rem 0' }}>
-              <div>Você acertou a resposta!</div>
-              <div>{question}</div>
+              <Typography>Você errou a resposta!</Typography>
+              <Typography>{question.replace(/&quot;/g, '"').replace(/&#039;/g, "'")}</Typography>
               {randomAnswers.map(({ answer, id }) => {
                 if (id === rightAnswerID) {
-                  return <div style={{ color: 'green' }}>{answer}</div>;
+                  return <Typography style={{ color: 'green' }}>{answer}</Typography>;
+                } else if (id === answerID) {
+                  return <Typography style={{ color: 'red' }}>{answer}</Typography>;
                 }
-                return (
-                  <div key='olar'>
-                    {answer}
-                  </div>
-                );
+                return <Typography key='olar'>{answer}</Typography>;
               })}
             </section>
-          )
-        } return (
-          <section key={rightAnswerID} style={{ margin: '2rem 0' }}>
-            <div>Você errou a resposta!</div>
-            <div>{question}</div>
-            {randomAnswers.map(({ answer, id }) => {
-              if (id === rightAnswerID) {
-                return <div style={{ color: 'green' }}>{answer}</div>;
-              } else if (id === answerID) {
-                return <div style={{ color: 'red' }}>{answer}</div>;
-              }
-              return (
-                <div key='olar'>
-                  {answer}
-                </div>
-              );
-            })}
-          </section>
-        )}        
+          );
+        }
       })}
     </div>
   );

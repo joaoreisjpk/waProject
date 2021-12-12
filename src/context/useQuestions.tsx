@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { api } from '../api';
 
 interface questionProps {
@@ -37,7 +37,7 @@ export function TransactionsProvider({ children }) {
   
     const { results } = response.data;
 
-    console.log(results);
+    console.log(response);
     setQuestions(results);
   };
 /* 

@@ -1,47 +1,25 @@
+import { Typography } from '@mui/material';
 import React from 'react';
+import ResumeCards from '../../components/ResumeCards';
+import Header from '../../components/Header';
 import { useQuestions } from '../../context/useQuestions';
+
+interface resumeProps {
+  rightAnswerID: string;
+  answerID: string;
+  randomAnswers: { id: string, answer: string}[];
+  difficulty: string;
+  question: string;
+}
 
 export default function Resume() {
   const { resume } = useQuestions();
   return (
     <div>
-      {resume.map(({ randomAnswers, rightAnswerID, answerID, question }) => {
-        {if (rightAnswerID === answerID) {
-          return (
-            <section key={rightAnswerID} style={{ margin: '2rem 0' }}>
-              <div>Você acertou a resposta!</div>
-              <div>{question}</div>
-              {randomAnswers.map(({ answer, id }) => {
-                if (id === rightAnswerID) {
-                  return <div style={{ color: 'green' }}>{answer}</div>;
-                }
-                return (
-                  <div key='olar'>
-                    {answer}
-                  </div>
-                );
-              })}
-            </section>
-          )
-        } return (
-          <section key={rightAnswerID} style={{ margin: '2rem 0' }}>
-            <div>Você errou a resposta!</div>
-            <div>{question}</div>
-            {randomAnswers.map(({ answer, id }) => {
-              if (id === rightAnswerID) {
-                return <div style={{ color: 'green' }}>{answer}</div>;
-              } else if (id === answerID) {
-                return <div style={{ color: 'red' }}>{answer}</div>;
-              }
-              return (
-                <div key='olar'>
-                  {answer}
-                </div>
-              );
-            })}
-          </section>
-        )}        
-      })}
+      <Header />
+      {resume.map((item: resumeProps) => (
+        <ResumeCards cardObject={item} key={item.rightAnswerID} />
+      ))}
     </div>
   );
 }

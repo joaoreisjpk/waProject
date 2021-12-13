@@ -1,37 +1,45 @@
 import { Button, Typography, Box} from '@mui/material';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../../components/Header';
 import { useQuestions } from '../../context/useQuestions';
-import { shuffle } from '../../helpers';
+import { handleSpecialCharacters, shuffle } from '../../helpers';
 
 export default function Questions() {
   const [index, setIndex] = useState(0);
+  const [answersArray, setAnswersArray] = useState([]);
   const { push } = useRouter();
-  const { questions, resume, setResume } = useQuestions();
-
-  const randomID = () => Math.ceil(Math.random() * 10 ** 13).toString();
-  const rightAnswerID = randomID();
-
+  const { questions, setResume } = useQuestions();
+  
   const { category, correct_answer, difficulty, incorrect_answers, question } =
     questions[index];
 
-  const rightAnswer = correct_answer
-    .replace(/&quot;/g, '"')
-    .replace(/&#039;/g, "'");
+  // Checando se 'questions' está com seu valor default
+  useEffect(() => {
+    if (!questions[0].category) {
+      push('/');
+      return;
+    }
+  })
 
+  // randomizando ids marcar a resposta certa
+  const randomID = () => Math.ceil(Math.random() * 10 ** 13).toString();
+  const rightAnswerID = randomID();
+
+  // ajeitando os caracteres especiais -> Entities
+  const rightAnswer = handleSpecialCharacters(correct_answer);
   const wrongAnswers = incorrect_answers.map((item) => ({
     id: randomID(),
-    answer: item.replace(/&quot;/g, '"').replace(/&#039;/g, "'"),
+    answer: handleSpecialCharacters(item),
   }));
 
+  // juntando e randomizando as respostas
   const answers = [...wrongAnswers, { id: rightAnswerID, answer: rightAnswer }];
-
   const randomAnswers = shuffle(answers);
 
   function handleClick({ target }) {
-    setResume([
-      ...resume,
+    const arrayAtt = [
+      ...answersArray,
       {
         rightAnswerID,
         question,
@@ -39,13 +47,16 @@ export default function Questions() {
         randomAnswers,
         difficulty,
       },
-    ]);
+    ]
 
     if (index === questions.length - 1) {
+      localStorage.setItem('resume', JSON.stringify(arrayAtt))
+      setResume(arrayAtt)
       push('/resume');
       return;
     }
 
+    setAnswersArray(arrayAtt);
     setIndex(index + 1);
   }
 
@@ -57,12 +68,14 @@ export default function Questions() {
           Pergunta {index + 1} de {questions.length}
         </Typography>
         <Typography>{category}</Typography>
-        <Typography>{question.replace(/&quot;/g, '"').replace(/&#039;/g, "'")}</Typography>
+        <Typography>{handleSpecialCharacters(question)}</Typography>
+
         {randomAnswers.map(({ id, answer }) => (
           <Button variant="contained" key={answer} type='button' onClick={handleClick} id={id}>
             {answer}
           </Button>
         ))}
+
       </Box>
     </section>
   );

@@ -1,4 +1,11 @@
-import { Button, Typography, Box} from '@mui/material';
+import {
+  Button,
+  Typography,
+  Box,
+  ButtonGroup,
+  Grid,
+  Stack,
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Header from '../../components/Header';
@@ -10,7 +17,7 @@ export default function Questions() {
   const [answersArray, setAnswersArray] = useState([]);
   const { push } = useRouter();
   const { questions, setResume } = useQuestions();
-  
+
   const { category, correct_answer, difficulty, incorrect_answers, question } =
     questions[index];
 
@@ -20,7 +27,7 @@ export default function Questions() {
       push('/');
       return;
     }
-  })
+  });
 
   // randomizando ids marcar a resposta certa
   const randomID = () => Math.ceil(Math.random() * 10 ** 13).toString();
@@ -47,11 +54,11 @@ export default function Questions() {
         randomAnswers,
         difficulty,
       },
-    ]
+    ];
 
     if (index === questions.length - 1) {
-      localStorage.setItem('resume', JSON.stringify(arrayAtt))
-      setResume(arrayAtt)
+      localStorage.setItem('resume', JSON.stringify(arrayAtt));
+      setResume(arrayAtt);
       push('/resume');
       return;
     }
@@ -61,22 +68,54 @@ export default function Questions() {
   }
 
   return (
-    <section>
+    <Grid>
       <Header />
-      <Box padding={20}>
-        <Typography>
-          Pergunta {index + 1} de {questions.length}
-        </Typography>
-        <Typography>{category}</Typography>
-        <Typography>{handleSpecialCharacters(question)}</Typography>
-
-        {randomAnswers.map(({ id, answer }) => (
-          <Button variant="contained" key={answer} type='button' onClick={handleClick} id={id}>
-            {answer}
-          </Button>
-        ))}
-
-      </Box>
-    </section>
+      <Grid
+        height='100%'
+        maxWidth="900px"
+        margin='auto'
+        padding={5}
+        container
+        justifyContent='center'
+        alignItems='center'
+      >
+        <Stack gap={6}>
+          <Stack gap={2} direction="row" justifyContent="space-between">
+            <Typography variant='h6'>
+              Pergunta {index + 1} de {questions.length}
+            </Typography>
+            <Typography variant='h5'>{category}</Typography>
+          </Stack>
+          <Grid container margin="auto" gap={3}>
+            <Typography variant='h4' sx={{textAlign: "center"}} width="100%">
+              {handleSpecialCharacters(question)}
+            </Typography>
+            <ButtonGroup
+              orientation="vertical"
+              sx={{
+                width: 500,
+                margin: "auto",
+              }}
+              variant='contained'
+            >
+              {randomAnswers.map(({ id, answer }) => (
+                <Button
+                  variant='contained'
+                  key={answer}
+                  type='button'
+                  sx={{
+                    height: 50,
+                  }}
+                  onClick={handleClick}
+                  id={id}
+                >
+                  {answer}
+                </Button>
+              ))}
+            </ButtonGroup>
+          </Grid>
+        </Stack>
+      </Grid>
+    </Grid>
   );
 }

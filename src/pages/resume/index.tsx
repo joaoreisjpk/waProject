@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
 import ResumeCards from '../../components/ResumeCards';
 import Header from '../../components/Header';
@@ -15,11 +15,14 @@ interface resumeProps {
 export default function Resume() {
   const { resume } = useQuestions();
   return (
-    <div>
+    <Grid container direction="column">
       <Header />
-      {resume.map((item: resumeProps) => (
-        <ResumeCards cardObject={item} key={item.rightAnswerID} />
-      ))}
-    </div>
+      <Stack gap={3} direction="column" margin="auto" padding={5}>
+        <Typography variant="h2">Resume</Typography>
+        {resume.map((item: resumeProps, index: number) => (
+          <ResumeCards index={index} cardObject={item} key={item.rightAnswerID} />
+        ))}
+      </Stack>
+    </Grid>
   );
 }

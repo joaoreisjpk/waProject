@@ -25,18 +25,18 @@ const defaultQuestions = [{
   question: '',
 }]
 
-interface TransactionContextData {
+interface QuestionsContextProps {
   questions: questionProps[];
   fetchQuestions: (param: string) => void;
   resume: resumeProps[];
   setResume: (param: resumeProps[]) => void;
 };
 
-export const QuestionsContext = createContext<TransactionContextData>(
-  {} as TransactionContextData
+export const QuestionsContext = createContext<QuestionsContextProps>(
+  {} as QuestionsContextProps
 );
 
-export function TransactionsProvider({ children }) {
+export function QuestionsProvider({ children }) {
   const [questions, setQuestions] = useState<questionProps[]>(defaultQuestions as questionProps[]);
   const [resume, setResume] = useState<resumeProps[]>([]);
 

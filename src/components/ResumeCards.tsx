@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Button, ButtonGroup, Typography } from '@mui/material';
 import { handleSpecialCharacters } from '../helpers';
 
 interface resumeProps {
@@ -11,35 +11,37 @@ interface resumeProps {
 
 interface AnswerCardProps {
   cardObject: resumeProps;
+  index?: number;
 }
 
-export default function AnswerCard({ cardObject }: AnswerCardProps) {
+export default function AnswerCard({ cardObject, index }: AnswerCardProps) {
   const { randomAnswers, rightAnswerID, answerID, question } = cardObject;
 
-  function Card({ title }: { title: string }) {
+  function Card() {
     return (
-      <section key={rightAnswerID} style={{ margin: '2rem 0' }}>
-        <Typography>{title}</Typography>
-        <Typography>
-          {handleSpecialCharacters(question)}
+      <section key={rightAnswerID}>
+        <Typography variant="h5">
+          {(index + 1) + ' - ' + handleSpecialCharacters(question)}
         </Typography>
 
-        {randomAnswers.map(({ answer, id }) => {
-          if (id === rightAnswerID) {
-            return <Typography style={{ color: 'green' }}>{answer}</Typography>;
-          } else if (id === answerID) {
-            return <Typography style={{ color: 'red' }}>{answer}</Typography>;
-          }
-          return <Typography key='olar'>{answer}</Typography>;
-        })}
+        <ButtonGroup orientation="vertical" sx={{ margin: '1rem 2rem'}}>
+          {randomAnswers.map(({ answer, id }) => {
+            if (id === rightAnswerID) {
+              return <Button disabled style={{ color: 'green', minWidth: '300px', fontWeight: '600' }}>{answer}</Button>;
+            } else if (id === answerID) {
+              return <Button disabled style={{ color: 'red', minWidth: '300px', fontWeight: '600' }}>{answer}</Button>;
+            }
+            return <Button disabled key={id} style={{ color: 'gray', minWidth: '300px', fontWeight: '600' }}>{answer}</Button>;
+          })}
+        </ButtonGroup>
 
       </section>
     );
   }
 
   return rightAnswerID === answerID ? (
-    <Card title='Você acertou a resposta!' />
+    <Card />
   ) : (
-    <Card title='Você errou a resposta!' />
+    <Card />
   );
 }

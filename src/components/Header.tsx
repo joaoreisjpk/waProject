@@ -7,7 +7,7 @@ export default function Header() {
     <AppBar position='static'>
       <Toolbar variant='dense'>
         <NextLink href='/'>
-          <Link href='#' color='secondary' underline='none'>
+          <Link href='#' color='white' underline='none'>
             <Typography variant='h5'>waProject</Typography>
           </Link>
         </NextLink>

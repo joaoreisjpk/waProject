@@ -1,60 +1,80 @@
-import { Button, TextField, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import Header from '../components/Header';
+import { useRouter } from 'next/router';
+import { Formik, Form, Field, useField, FieldAttributes } from 'formik';
 import { useQuestions } from '../context/useQuestions';
-import { Formik } from 'formik';
 
+import { Button, TextField, Typography } from '@mui/material';
+import Header from '../components/Header';
+
+import CircularProgress from '@mui/material/CircularProgress';
 import SendIcon from '@mui/icons-material/Send';
 
 export default function Home() {
-  const [question, setQuestion] = useState<string>('');
-  const [error, setError] = useState<string>('');
   const { push } = useRouter();
   const { fetchQuestions, resume } = useQuestions();
 
-  const onSubmit = (e): void => {
-    e.preventDefault();
+  const submitHandler = async (data, { setSubmitting }) => {
+    setSubmitting(true);
+    await fetchQuestions(data.questionNumber);
+    push('/start');
+  }
 
-    if (Number(question) && Number(question) > 0 && Number(question) <= 50) {
-      fetchQuestions(question);
-      push('/start');
-    } else {
-      setError('Insira um número de 1 a 50');
-      return;
+  const validate = (param) => {
+    if (Number(param) && Number(param) > 0 && Number(param) <= 50) {
+      return {};
     }
+    return { questionNumber: 'Insira um número de 1 a 50' };
+  };
+
+  type MyRadioProps = { label: string } & FieldAttributes<{}>;
+
+  const MUInput: React.FC<MyRadioProps> = ({ label, ...props }) => {
+    const [field, meta] = useField<{}>(props);
+    const errorText = meta.error && meta.touched ? meta.error : '';
+    return (
+      <TextField
+        type="number"
+        error={!!errorText}
+        helperText={errorText}
+        variant='outlined'
+        color='secondary'
+        label='Number'
+        {...field}
+      />
+    );
   };
 
   return (
     <div>
       <Header />
 
-      <Formik initialValues={{ questionNumber: '' }} onSubmit={data => console.log(data)}>
-        {() => (
-          <form onSubmit={onSubmit}>
+      <Formik
+        initialValues={{ questionNumber: '' }}
+        validate={({ questionNumber: param }) => validate(param)}
+        onSubmit={async (param1, param2) => await submitHandler(param1, param2)}
+      >
+        {({ isSubmitting }) => (
+          <Form>
             <label>
               <Typography>How many questions?</Typography>
             </label>
-            <TextField
-              type='text'
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              required
-              error={!!error}
-              helperText={error}
-              variant='outlined'
-              color='secondary'
-              label='Number'
-            />
+            <MUInput name='questionNumber' type='input' label='sei la' />
             <Button
-              endIcon={<SendIcon />}
+              endIcon={
+                isSubmitting ? (
+                  <CircularProgress color='secondary' />
+                ) : (
+                  <SendIcon />
+                )
+              }
               size='large'
               type='submit'
               variant='contained'
+              disabled={isSubmitting}
             >
-              Enviar
+              {isSubmitting ? '' : 'Enviar'}
             </Button>
-          </form>
+          </Form>
         )}
       </Formik>
       {!!resume.length && (

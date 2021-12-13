@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import { useQuestions } from '../context/useQuestions';
+import { Formik } from 'formik';
 
 import SendIcon from '@mui/icons-material/Send';
 
@@ -28,41 +29,45 @@ export default function Home() {
     <div>
       <Header />
 
-      <form onSubmit={onSubmit}>
-        <label>
-          <Typography>How many questions?</Typography>
-        </label>
-        <TextField
-          type='text'
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          required
-          error={!!error}
-          helperText={error}
-          variant='outlined'
-          color='secondary'
-          label='Number'
-        />
+      <Formik initialValues={{ questionNumber: '' }} onSubmit={data => console.log(data)}>
+        {() => (
+          <form onSubmit={onSubmit}>
+            <label>
+              <Typography>How many questions?</Typography>
+            </label>
+            <TextField
+              type='text'
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              required
+              error={!!error}
+              helperText={error}
+              variant='outlined'
+              color='secondary'
+              label='Number'
+            />
+            <Button
+              endIcon={<SendIcon />}
+              size='large'
+              type='submit'
+              variant='contained'
+            >
+              Enviar
+            </Button>
+          </form>
+        )}
+      </Formik>
+      {!!resume.length && (
         <Button
           endIcon={<SendIcon />}
           size='large'
           type='submit'
           variant='contained'
+          onClick={() => push('/resume')}
         >
-          Enviar
+          Ver antigo Relatório
         </Button>
-      </form>
-        {!!resume.length && (
-          <Button
-            endIcon={<SendIcon />}
-            size='large'
-            type='submit'
-            variant='contained'
-            onClick={() => push('/resume')}
-          >
-            Ver antigo Relatório
-          </Button>
-        )}
+      )}
     </div>
   );
 }

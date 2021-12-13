@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { api } from '../api';
 
 interface questionProps {
@@ -17,6 +17,14 @@ interface resumeProps {
   question: string;
 }
 
+const defaultQuestions = [{
+  category: '',
+  correct_answer: '',
+  difficulty: '',
+  incorrect_answers: [''],
+  question: '',
+}]
+
 interface TransactionContextData {
   questions: questionProps[];
   fetchQuestions: (param: string) => void;
@@ -29,9 +37,13 @@ export const QuestionsContext = createContext<TransactionContextData>(
 );
 
 export function TransactionsProvider({ children }) {
-  const [questions, setQuestions] = useState<questionProps[]>([]);
+  const [questions, setQuestions] = useState<questionProps[]>(defaultQuestions as questionProps[]);
   const [resume, setResume] = useState<resumeProps[]>([]);
-  
+
+  useEffect(() => {
+    setResume(JSON.parse(localStorage.getItem('resume') || '[]'))
+  }, [])
+
   async function fetchQuestions(param: string) {
     const response = await api.get(`api.php?amount=${param}`);
   
@@ -40,6 +52,10 @@ export function TransactionsProvider({ children }) {
     console.log(response);
     setQuestions(results);
   };
+
+  useEffect(() => {
+    
+  }, [])
 /* 
   function pontuationAtt(param: string) {
     if (param === 'easy') {

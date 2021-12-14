@@ -79,32 +79,37 @@ export default function Questions() {
         justifyContent='center'
         alignItems='center'
       >
-        <Stack gap={6}>
+        <Stack gap={8}>
           <Stack gap={2} direction="row" justifyContent="space-between">
             <Typography variant='h6'>
               Pergunta {index + 1} de {questions.length}
             </Typography>
             <Typography variant='h5'>{category}</Typography>
           </Stack>
-          <Grid container margin="auto" gap={3}>
-            <Typography variant='h4' sx={{textAlign: "center"}} width="100%">
-              {handleSpecialCharacters(question)}
-            </Typography>
+          <Grid container margin="auto" gap={4}>
+            <Stack width="100%">
+              <Typography variant='h4' sx={{textAlign: "center", fontSize: '1.5rem', fontWeight: '600'}} maxWidth="574px" margin="auto">
+                {handleSpecialCharacters(question)}
+              </Typography>
+            </Stack>
             <ButtonGroup
               orientation="vertical"
               sx={{
-                width: 500,
+                minWidth: 300,
                 margin: "auto",
               }}
-              variant='contained'
+              
             >
               {randomAnswers.map(({ id, answer }) => (
                 <Button
-                  variant='contained'
+                  
                   key={answer}
                   type='button'
                   sx={{
-                    height: 50,
+                    height: 40,
+                    fontWeight: 600,
+                    fontSize: '.9rem',
+                    borderWidth: '2px',
                   }}
                   onClick={handleClick}
                   id={id}

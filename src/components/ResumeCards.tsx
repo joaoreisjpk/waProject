@@ -1,4 +1,6 @@
-import { Button, ButtonGroup, Typography } from '@mui/material';
+import { Button as MUIButton, ButtonGroup, Typography } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
+import { useQuestions } from '../context/useQuestions';
 import { handleSpecialCharacters } from '../helpers';
 
 interface resumeProps {
@@ -14,34 +16,38 @@ interface AnswerCardProps {
   index?: number;
 }
 
-export default function AnswerCard({ cardObject, index }: AnswerCardProps) {
+export default function ResumeCard({ cardObject, index }: AnswerCardProps) {
   const { randomAnswers, rightAnswerID, answerID, question } = cardObject;
 
-  function Card() {
-    return (
-      <section key={rightAnswerID}>
-        <Typography variant="h5">
-          {(index + 1) + ' - ' + handleSpecialCharacters(question)}
-        </Typography>
+  const Button = ({ color, answer }: { color: string; answer: string }) => (
+    <MUIButton
+      disabled
+      style={{
+        color,
+        minWidth: '300px',
+        fontWeight: '600',
+      }}
+    >
+      {answer}
+    </MUIButton>
+  );
 
-        <ButtonGroup orientation="vertical" sx={{ margin: '1rem 2rem'}}>
-          {randomAnswers.map(({ answer, id }) => {
-            if (id === rightAnswerID) {
-              return <Button disabled style={{ color: 'green', minWidth: '300px', fontWeight: '600' }}>{answer}</Button>;
-            } else if (id === answerID) {
-              return <Button disabled style={{ color: 'red', minWidth: '300px', fontWeight: '600' }}>{answer}</Button>;
-            }
-            return <Button disabled key={id} style={{ color: 'gray', minWidth: '300px', fontWeight: '600' }}>{answer}</Button>;
-          })}
-        </ButtonGroup>
+  return (
+    <section key={rightAnswerID}>
+      <Typography variant='h5'>
+        {index + 1 + ' - ' + handleSpecialCharacters(question)}
+      </Typography>
 
-      </section>
-    );
-  }
+      <ButtonGroup orientation='vertical' sx={{ margin: '1rem 2rem' }}>
+        {randomAnswers.map(({ answer, id }) => {
+          if (id === rightAnswerID)
+            return <Button answer={answer} color='green' />;
+          else if (id === answerID)
+            return <Button answer={answer} color='red' />;
 
-  return rightAnswerID === answerID ? (
-    <Card />
-  ) : (
-    <Card />
+          return <Button key={id} answer={answer} color='gray' />;
+        })}
+      </ButtonGroup>
+    </section>
   );
 }

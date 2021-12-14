@@ -1,10 +1,12 @@
-import { TransactionsProvider } from "../context/useQuestions"
+import { CssBaseline } from "@mui/material"
+import { QuestionsProvider } from "../context/useQuestions"
 
 function MyApp({ Component, pageProps }) {
   return (
-    <TransactionsProvider>
+    <QuestionsProvider>
+      <CssBaseline />
       <Component {...pageProps} />
-    </TransactionsProvider>
+    </QuestionsProvider>
   )
 }
 

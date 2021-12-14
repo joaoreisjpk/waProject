@@ -25,24 +25,33 @@ const defaultQuestions = [{
   question: '',
 }]
 
-interface TransactionContextData {
+interface QuestionsContextProps {
   questions: questionProps[];
   fetchQuestions: (param: string) => void;
   resume: resumeProps[];
   setResume: (param: resumeProps[]) => void;
+  count: number;
 };
 
-export const QuestionsContext = createContext<TransactionContextData>(
-  {} as TransactionContextData
+export const QuestionsContext = createContext<QuestionsContextProps>(
+  {} as QuestionsContextProps
 );
 
-export function TransactionsProvider({ children }) {
+export function QuestionsProvider({ children }) {
   const [questions, setQuestions] = useState<questionProps[]>(defaultQuestions as questionProps[]);
   const [resume, setResume] = useState<resumeProps[]>([]);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     setResume(JSON.parse(localStorage.getItem('resume') || '[]'))
   }, [])
+
+  useEffect(() => {
+    var counter = 0;
+    resume.forEach((item) => item.answerID === item.rightAnswerID && (counter += 1))
+
+    setCount(counter);
+  }, [resume])
 
   async function fetchQuestions(param: string) {
     const response = await api.get(`api.php?amount=${param}`);
@@ -56,8 +65,8 @@ export function TransactionsProvider({ children }) {
   useEffect(() => {
     
   }, [])
-/* 
-  function pontuationAtt(param: string) {
+
+/*   function pontuationAtt(param: string) {
     if (param === 'easy') {
       setPontuation(pontuation + 10)
     } else if (param === 'medium') {
@@ -68,7 +77,7 @@ export function TransactionsProvider({ children }) {
   } */
 
   return (
-    <QuestionsContext.Provider value={{ questions, fetchQuestions, resume, setResume }}>
+    <QuestionsContext.Provider value={{ questions, fetchQuestions, resume, setResume, count }}>
       {children}
     </QuestionsContext.Provider>
   );

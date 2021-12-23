@@ -1,34 +1,46 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## O projeto
+Esse projeto é um jogo de trívia, feito para o usuário escolher de 1 a 50 perguntas, e assim que responder, receber um feedback de quantas e quais perguntas se acertou e errou.
 
-## Getting Started
+Regras de negócio:
+ - O número do input deve ser um inteiro de 1 a 50
 
-First, run the development server:
+[Link do site](https://digital-republic.vercel.app/)
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+![plot](./src/preview.png)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Como usar
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Assim que usuário logar no site, irá aparecer um formulário que é composto por um input, onde será necessário escolher um número inteiro entre 1 e 50. Apertando o botão de enviar, o usuário será redirecionado para uma tela onde poderá dar start no questionário, ou cancelar a operação, voltando para a página inicial. Se o usuário escolher startar, será iniciado o jogo de Trívia, com no final aparecendo a pontuação do jogador e um feedback de quais perguntas acertou e quais errou.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Como foi desenvolvido
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Esse aplicação foi desenvolvida com o framework NextJS com TypeScript, usando a biblioteca de estilização Material UI. Além disso também foi utilizado a biblioteca Formik para melhorar a experiência do usuário e facilitar a validação dos inputs.
 
-## Learn More
+- [Trivia API](https://opentdb.com/)
+- NextJS
+- TypeScript
+- MaterialUI
+- Formik
 
-To learn more about Next.js, take a look at the following resources:
+## Como fazer a aplicação rodar
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Para usar a aplicação, é necessário usar a sequência de comandos abaixo:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+`yarn
+yarn dev`
 
-## Deploy on Vercel
+ou para NPM
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`npm install
+npm start`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Maiores desafios
+
+- 1º Fazer a validação dos dados, com todas as limitações existentes
+- 2º Trazer a melhor experiência de usuário, refatorando algumas vezes o código para trazer uma melhor solução
+- 3º Lidar com a randomização das respostas e com o resumo, mostrando as respostas certas e erradas.
+
+## Observações
+
+- Durante o código foram feitas observações para melhor compreenção da minha lógica/escolha, estas observações se encontram no início do `src/helpers/index.ts` e no meio da função `latasDeTinta` na `src/resultado/index.ts`
+- As outras observações são de menor importância e podem ser lidas durante a compreenção do código

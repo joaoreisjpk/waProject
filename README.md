@@ -27,6 +27,7 @@ Esse aplicação foi desenvolvida com o framework NextJS com TypeScript, usando 
 Para usar a aplicação, é necessário usar a sequência de comandos abaixo:
 
 ```
+git clone git@github.com:joaoreisjpk/waProject.git
 yarn
 yarn dev
 ```

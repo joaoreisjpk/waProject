@@ -26,8 +26,10 @@ Esse aplicação foi desenvolvida com o framework NextJS com TypeScript, usando 
 
 Para usar a aplicação, é necessário usar a sequência de comandos abaixo:
 
-`yarn
-yarn dev`
+```
+yarn
+yarn dev
+```
 
 ou para NPM
 
